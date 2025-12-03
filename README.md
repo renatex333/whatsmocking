@@ -85,7 +85,7 @@ WhatsMocking follows clean architecture principles with clear separation of conc
 ### Architecture Diagram
 
 ```mermaid
-graph TD
+flowchart TD
     %% Styles
     classDef uiLayer fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1;
     classDef stateLayer fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20;
@@ -141,7 +141,7 @@ graph TD
 #### Sending Messages (Outbound)
 
 ```mermaid
-graph LR
+flowchart LR
     %% Styles
     classDef trigger fill:#d1c4e9,stroke:#512da8,stroke-width:2px,color:#311b92,font-weight:bold;
     classDef component fill:#ffffff,stroke:#37474f,stroke-width:2px,color:#263238;
@@ -166,7 +166,7 @@ graph LR
 #### Receiving Messages (Inbound)
 
 ```mermaid
-graph LR
+flowchart LR
     %% Styles
     classDef component fill:#ffffff,stroke:#37474f,stroke-width:2px,color:#263238;
     classDef uiSideEffect fill:#b2dfdb,stroke:#00695c,stroke-width:1px,stroke-dasharray: 5 5,color:#004d40;
@@ -413,7 +413,7 @@ When your backend sends interactive messages, users can:
 WhatsMocking provides bidirectional webhook communication:
 
 ```mermaid
-graph LR
+flowchart LR
     %% ==========================================
     %% Styles
     %% ==========================================
