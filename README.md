@@ -278,14 +278,12 @@ flutter run -d windows
 
 # macOS
 flutter run -d macos
-
-# Web
-flutter run -d chrome
 ```
 
 The application will start and display:
 - **Webhook server running on http://localhost:9090**
 - **Ready to receive messages at http://localhost:9090/messages**
+- The application is not supported on Web platoform, because web browsers do not support operations of HTTP server.
 
 ---
 

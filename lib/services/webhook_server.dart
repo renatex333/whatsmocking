@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart';
@@ -23,6 +24,13 @@ class WebhookServer {
 
   /// Starts the HTTP server to receive webhooks.
   Future<void> start() async {
+    // Web platform doesn't support HTTP servers
+    if (kIsWeb) {
+      print('⚠️ Webhook server not available on Web platform');
+      print('💡 Use desktop (Linux/Windows/macOS) for full webhook functionality');
+      return;
+    }
+
     final router = Router();
 
     // Health check endpoint
