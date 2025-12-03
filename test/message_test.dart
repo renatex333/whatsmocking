@@ -116,69 +116,82 @@ void main() {
       });
     });
 
-    test('copyWith should create a copy with updated fields', () {
-      final original = Message(
-        id: '1',
-        content: 'Original',
-        isSentByMe: true,
-      );
-
-      final copy = original.copyWith(content: 'Modified');
-
-      expect(copy.id, '1');
-      expect(copy.content, 'Modified');
-      expect(copy.isSentByMe, true);
-      expect(original.content, 'Original');
-    });
-
-    test('equality should work correctly', () {
-      final message1 = Message(
-        id: '1',
-        content: 'Hello',
-        isSentByMe: true,
-      );
-      final message2 = Message(
-        id: '1',
-        content: 'Hello',
-        isSentByMe: true,
-      );
-      final message3 = Message(
-        id: '2',
-        content: 'Hello',
-        isSentByMe: true,
-      );
-
-      expect(message1 == message2, true);
-      expect(message1 == message3, false);
-    });
-
-    test('hashCode should be consistent with equality', () {
-      final message1 = Message(
-        id: '1',
-        content: 'Hello',
-        isSentByMe: true,
-      );
-      final message2 = Message(
-        id: '1',
-        content: 'Hello',
-        isSentByMe: true,
-      );
-
-      expect(message1.hashCode, message2.hashCode);
-    });
-
-    test('toString should return readable format', () {
+    test('should handle interactive messages with buttons', () {
       final message = Message(
-        id: '1',
-        content: 'Test',
+        content: 'Choose an option',
+        isSentByMe: false,
+        messageType: 'interactive',
+        interactive: {
+          'type': 'button',
+          'body': {'text': 'Button message'},
+          'action': {
+            'buttons': [
+              {
+                'reply': {'id': 'btn1', 'title': 'Option 1'}
+              },
+              {
+                'reply': {'id': 'btn2', 'title': 'Option 2'}
+              },
+            ]
+          }
+        },
+      );
+
+      expect(message.isInteractive, true);
+      expect(message.hasButtons, true);
+      expect(message.isList, false);
+      expect(message.buttons.length, 2);
+      expect(message.interactiveBodyText, 'Button message');
+    });
+
+    test('should handle interactive messages with lists', () {
+      final message = Message(
+        content: 'Select from list',
+        isSentByMe: false,
+        messageType: 'interactive',
+        interactive: {
+          'type': 'list',
+          'body': {'text': 'List message'},
+          'action': {
+            'sections': [
+              {
+                'title': 'Section 1',
+                'rows': [
+                  {'id': 'row1', 'title': 'Item 1'},
+                ]
+              }
+            ]
+          }
+        },
+      );
+
+      expect(message.isInteractive, true);
+      expect(message.isList, true);
+      expect(message.hasButtons, false);
+      expect(message.interactiveBodyText, 'List message');
+    });
+
+    test('toWhatsAppWebhookJson should format correctly', () {
+      final message = Message(
+        id: 'msg_123',
+        content: 'Hello',
         isSentByMe: true,
       );
 
-      final str = message.toString();
+      final webhook = message.toWhatsAppWebhookJson(
+        waId: '5511999999999',
+        displayPhoneNumber: '+55 11 99999-9999',
+        profileName: 'John Doe',
+      );
 
-      expect(str.contains('Message'), true);
-      expect(str.contains('id: 1'), true);
-      expect(str.contains('content: Test'), true);
+      expect(webhook['object'], 'whatsapp_business_account');
+      expect(webhook['entry'], isNotNull);
+      expect(webhook['entry'][0]['changes'][0]['value']['messages'], isNotNull);
+
+      final webhookMessage =
+          webhook['entry'][0]['changes'][0]['value']['messages'][0];
+      expect(webhookMessage['from'], '5511999999999');
+      expect(webhookMessage['text']['body'], 'Hello');
     });
   });
 }

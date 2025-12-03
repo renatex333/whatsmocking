@@ -1,13 +1,22 @@
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// API configuration with adaptive URL detection for Android emulator and other platforms.
 class ApiConfig {
-  static const String _defaultPort = '3000';
-  static const String _messagesEndpoint = '/messages';
+  /// API port loaded from .env file.
+  static String get _defaultPort => dotenv.env['API_PORT'] ?? '8080';
+
+  /// API endpoint loaded from .env file.
+  static String get _messagesEndpoint =>
+      dotenv.env['API_ENDPOINT'] ?? '/webhook';
+
+  /// App secret for HMAC-SHA256 signature validation.
+  /// Loaded from .env file for security.
+  static String get appSecret => dotenv.env['APP_SECRET'] ?? '';
 
   /// Returns the base URL based on the platform.
-  /// 
+  ///
   /// For Android emulator: uses 10.0.2.2 (special alias for host machine's localhost)
   /// For iOS simulator/other platforms: uses localhost
   /// For web: uses localhost
@@ -36,7 +45,8 @@ class ApiConfig {
   static String get port => _defaultPort;
 
   /// Creates a custom base URL with the given host and port.
-  static String customBaseUrl(String host, {String port = _defaultPort}) {
+  static String customBaseUrl(String host, {String? port}) {
+    port ??= _defaultPort;
     return 'http://$host:$port';
   }
 }
