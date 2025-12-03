@@ -11,6 +11,8 @@
 
 [Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started) • [Documentation](#documentation) • [Testing](#testing)
 
+![Demo](docs/project-demo.gif)
+
 </div>
 
 ---
